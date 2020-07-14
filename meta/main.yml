@@ -3,7 +3,7 @@
 
 galaxy_info:
   author: "Mira \"Mireiawen\" Manninen"
-  role_name: "hub"
+  role_name: "blackbox"
   description: "Install the Blackbox hub command line utility"
 
   license: "MIT"
