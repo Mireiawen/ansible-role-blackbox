@@ -1,0 +1,22 @@
+---
+## /* vim: set tabstop=2 softtabstop=2 shiftwidth=2 expandtab smarttab autoindent: */
+
+- name: "Prepare"
+  hosts: "all"
+  gather_facts: false
+  pre_tasks:
+  - name: "Install Python"
+    raw: "pacman -Sy && pacman -S --noconfirm python"
+    changed_when: false
+  tasks:
+  - name: "Install build tools"
+    package:
+      name:
+      - "git"
+      - "make"
+      state: "present"
+  - name: "Install which"
+    package:
+      name:
+      - "which"
+      state: "present"

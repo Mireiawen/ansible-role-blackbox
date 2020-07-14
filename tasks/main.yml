@@ -1,0 +1,30 @@
+---
+## /* vim: set tabstop=2 softtabstop=2 shiftwidth=2 expandtab smarttab autoindent: */
+
+- name: "Check if blackbox is installed"
+  shell: "which blackbox_initialize >>/dev/null 2>&1 ; echo $?"
+  register: "blackbox_init_exe"
+  changed_when: false
+
+- name: "Get temporary directory for building"
+  tempfile:
+    state: "directory"
+    suffix: "blackbox"
+  register: "blackbox_build"
+  when:
+  - "'0' not in blackbox_init_exe.stdout or blackbox_force_build"
+
+- name: "Get the source code"
+  git:
+    repo: "https://github.com/StackExchange/blackbox.git"
+    dest: "{{ blackbox_build.path }}/blackbox"
+    version: "{{ blackbox_source_version }}"
+  when:
+  - "blackbox_build.path is defined"
+
+- name: "Install"
+  make:
+    chdir: "{{ blackbox_build.path }}/blackbox"
+    target: "copy-install"
+  when:
+  - "blackbox_build.path is defined"
