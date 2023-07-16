@@ -1,0 +1,25 @@
+---
+## /* vim: set tabstop=2 softtabstop=2 shiftwidth=2 expandtab smarttab autoindent: */
+
+- name: 'Converge'
+  hosts: 'all'
+  become: true
+
+  pre_tasks:
+  - name: 'Make sure the package cache is up to date'
+    ansible.builtin.apt:
+      update_cache: true
+      cache_valid_time: 600
+    when: 'ansible_os_family == "Debian"'
+    changed_when: false
+
+  - name: 'Install build tools'
+    ansible.builtin.package:
+      name:
+      - 'make'
+      - 'tar'
+      - 'gzip'
+      state: 'present'
+
+  roles:
+  - role: 'mireiawen.blackbox'

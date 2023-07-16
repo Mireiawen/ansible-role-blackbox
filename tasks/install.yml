@@ -1,0 +1,25 @@
+---
+## /* vim: set tabstop=2 softtabstop=2 shiftwidth=2 expandtab smarttab autoindent: */
+
+- name: "Get temporary directory for building"
+  ansible.builtin.tempfile:
+    state: "directory"
+    suffix: "blackbox"
+  register: "blackbox_build_dir"
+
+- name: "Get the source"
+  ansible.builtin.get_url:
+    url: "https://github.com/StackExchange/blackbox/archive/refs/tags/{{ blackbox_version }}.tar.gz"
+    dest: "{{ blackbox_build_dir.path }}/{{ blackbox_version }}.tar.gz"
+    mode: "u=rw,go="
+
+- name: "Extract the source"
+  ansible.builtin.unarchive:
+    src: "{{ blackbox_build_dir.path }}/{{ blackbox_version }}.tar.gz"
+    dest: "{{ blackbox_build_dir.path }}"
+    remote_src: true
+
+- name: "Install"
+  community.general.make:
+    chdir: "{{ blackbox_build_dir.path }}/blackbox-{{ blackbox_version }}"
+    target: "copy-install"

@@ -1,5 +1,5 @@
 ---
 ## /* vim: set tabstop=2 softtabstop=2 shiftwidth=2 expandtab smarttab autoindent: */
 
-blackbox_source_version: "HEAD"
+blackbox_version: "stable"
 blackbox_force_build: false
